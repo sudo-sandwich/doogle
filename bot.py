@@ -63,7 +63,7 @@ class DoogleClient(discord.Client):
         print(f'clearing old searches, num current searches: {len(current_searches)}')
         messages_to_remove = []
         for message_id, search in current_searches.items():
-            if time.time() - search['last_modified'] > 3600:
+            if time.time() - search['last_modified'] > 86400:
                 messages_to_remove.append(message_id)
         
         for message_id in messages_to_remove:
