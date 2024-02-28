@@ -15,9 +15,6 @@ class DoogleClient(discord.Client):
     async def setup_hook(self):
         self.clear_old_searches.start()
 
-    async def on_ready(self):
-        print(f'We have logged in as {client.user}')
-
     async def on_message(self, message):
         if message.author == client.user:
             return
