@@ -114,7 +114,8 @@ async def shift_search_result(message_id, shift_amount):
     
 def create_embed_from_search_result(message_id, index):
     item = current_searches[message_id]['items'][index]
-    embed = discord.Embed(title=f'doogle "{current_searches[message_id]['query']}"', type='rich', color=0x00ff00, description=item['image']['contextLink'])
+    query = current_searches[message_id]['query']
+    embed = discord.Embed(title=f'doogle "{query}"', type='rich', color=0x00ff00, description=item['image']['contextLink'])
     embed.set_image(url=item['link'])
     embed.set_footer(text=f'Result {index + 1}')
     return embed
