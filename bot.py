@@ -3,6 +3,7 @@ import aiohttp
 import discord
 from discord.ext import tasks
 import json
+import logging
 import time
 
 with open('keys.json', 'r') as f:
@@ -60,14 +61,12 @@ class DoogleClient(discord.Client):
 
     @tasks.loop(seconds=60)
     async def clear_old_searches(self):
-        print(f'clearing old searches, num current searches: {len(current_searches)}')
         messages_to_remove = []
         for message_id, search in current_searches.items():
             if time.time() - search['last_modified'] > 86400:
                 messages_to_remove.append(message_id)
         
         for message_id in messages_to_remove:
-            print(f'clearing search for message {message_id}')
             await current_searches[message_id]['message'].clear_reactions()
             del current_searches[message_id]
 
@@ -123,10 +122,11 @@ def create_embed_from_search_result(message_id, index):
     embed.set_footer(text=f'Result {index + 1}')
     return embed
 
+log_handler = logging.FileHandler(filename='doogle.log', encoding='utf-8', mode='w')
 
 intents = discord.Intents.default()
 intents.message_content = True
 intents.reactions = True
 
 client = DoogleClient(intents=intents)
-client.run(keys['discord'])
+client.run(keys['discord'], log_handler=log_handler, log_level=logging.DEBUG)
